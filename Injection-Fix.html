@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Safe Demo with DOMPurify</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; }
+    #comments { margin-top: 1rem; border-top: 1px solid #ccc; padding-top: 1rem; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+</head>
+<body>
+  <h1>Welcome Page</h1>
+
+  <div id="greeting"></div>
+
+  <h2>Leave a Comment</h2>
+  <form id="commentForm">
+    <input type="text" id="commentInput" placeholder="Your comment" size="40">
+    <button type="submit">Post Comment</button>
+  </form>
+  <div id="comments"></div>
+
+  <script>
+    function showGreeting() {
+      const params = new URLSearchParams(location.search);
+      const name = params.get('name') || 'Guest';
+      const greetingEl = document.getElementById('greeting');
+      greetingEl.textContent = `Hello, ${name}!`;
+    }
+    const comments = [];
+    function renderComments() {
+      const container = document.getElementById('comments');
+      container.innerHTML = '';
+      comments.forEach(c => {
+        const p = document.createElement('p');
+        p.innerHTML = DOMPurify.sanitize(c);
+        console.log(DOMPurify.sanitize(c));
+        container.appendChild(p);
+      });
+    }
+
+    document.getElementById('commentForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const input = document.getElementById('commentInput');
+      comments.push(DOMPurify.sanitize(c));
+      input.value = '';
+      renderComments();
+    });
+
+    showGreeting();
+    renderComments();
+  </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Eval Demo</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; }
+    textarea { width: 100%; font-family: monospace; }
+    #output { margin-top: 1rem; background: #f7f7f7; padding: 1rem; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Code Runner</h1>
+  <p>Enter a mathematical expression and click “Run”. Only numbers and + - * / ( ) are allowed.</p>
+  <textarea id="codeInput" rows="4">// e.g. 2 + 2 * (3 - 1)</textarea><br>
+  <button id="runBtn">Run</button>
+  <pre id="output"></pre>
+
+  <script>
+    document.getElementById('runBtn').addEventListener('click', () => {
+      const userCode = document.getElementById('codeInput').value;
+      const outputEl = document.getElementById('output');
+
+      try {
+        const result = eval(userCode);
+        outputEl.textContent = `Result: ${result}`;
+      } catch (err) {
+        outputEl.textContent = `Error: ${err.message}`;
+      }
+    });
+  </script>
+</body>
+</html>

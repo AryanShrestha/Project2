@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Safe Eval Demo</title>
+  <script nonce="${nonce}" src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.6.4/math.min.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; }
+    textarea { width: 100%; font-family: monospace; }
+    #output { margin-top: 1rem; background: #f7f7f7; padding: 1rem; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Safe Code Runner</h1>
+  <p>Enter a mathematical expression and click “Run”. Only numbers and + - * / ( ) are allowed.</p>
+  <textarea id="codeInput" rows="4">// e.g. 2 + 2 * (3 - 1)</textarea><br>
+  <button id="runBtn">Run</button>
+  <pre id="output"></pre>
+
+  <script>
+    document.getElementById('runBtn').addEventListener('click', () => {
+      const userCode = document.getElementById('codeInput').value.trim();
+      const safePattern = /^[0-9+\-*/().\s]+$/;
+      const outputEl = document.getElementById('output');
+
+      if (!safePattern.test(userCode)) {
+        outputEl.textContent = 'Error: Invalid characters detected. Only digits, spaces, and + - * / ( ) are allowed.';
+        return;
+      }
+
+      try {
+        // Safely evaluate using math.js (no eval)
+        const result = math.evaluate(userCode);
+        outputEl.textContent = `Result: ${result}`;
+      } catch (err) {
+        outputEl.textContent = `Error: ${err.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
